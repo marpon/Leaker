@@ -679,7 +679,12 @@ static _LEAK_T **_Leaker_Find(void *addr)
 static unsigned long _Leaker_Hash(void *addr)
 {
     win_err_handle();
-	unsigned long address = (unsigned long) addr;
+    #ifdef __x86_64__
+    	unsigned long long address1 = (unsigned long long) addr;
+    	unsigned long address = (unsigned long) address1;
+    #else
+    	unsigned long address = (unsigned long) addr;
+    #endif
 	address = (~address) + (address << 21); /* (a << 21) - a - 1; */
 	address = address ^ (address >> 24);
 	address = (address + (address << 3)) + (address << 8); /* a * 265 */
